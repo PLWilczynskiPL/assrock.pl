@@ -1,1 +1,1 @@
-# assrock.pl
+bro that's ass

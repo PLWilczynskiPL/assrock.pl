@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Sliders</title>
+  <style>
+    .container {
+      display: flex;
+    }
+    .sliders {
+      display: flex;
+      flex-direction: column;
+      margin-right: 20px;
+    }
+    .slider {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sliders">
+      <select id="audioSelect">
+        <option value="1">my dziś z piosenką</option>
+        <option value="2">do widzenia profesorze</option>
+        <option value="3">ale to już było</option>
+        <option value="4">rickroll</option>
+      </select>
+      <input type="range" min="0" max="100" value="" class="slider" id="slider">
+    </div>
+    <div id="text">Text on the right</div>
+  </div>
+
+  <audio id="audio1" src="audio1.mp3"></audio>
+ <audio id="audio2" src="audio2.mp3"></audio>
+  <audio id="audio3" src="audio3.mp3"></audio>
+  <audio id="audio4" src="audio4.mp3"></audio>
+
+  <button idplayStopButton">Play/Stop</button>
+  <span id="timeDisplay">0:00/0:00</span>
+
+  <script>
+    const audio1 = document.getElementById('audio1');
+    const audio2 = document.getElementById('audio2');
+    const audio3 = document.getElementById('audio3');
+    const audio4 = document.getElementById('audio4');
+    const audioSelect = document.getElementById('audioSelect');
+    const slider = document.getElementById('slider');
+    const playStopButton = document.getElementById('playStopButton');
+    const timeDisplay = document.getElementById('timeDisplay');
+
+    let currentAudio = audio1;
+
+    audioSelect.addEventListener('change', () => {
+      currentAudio.pause();
+      currentAudio = document.getElementById(`audio${audioSelect.value}`);
+    });
+
+    slider.addEventListener('input', () => {
+      currentAudio.currentTime = (slider.value / 100) * currentAudio.duration;
+    });
+
+    playStopButton.addEventListener('click', () => {
+      if (currentAudio.paused) {
+        currentAudio.play();
+      } else {
+        currentAudio.pause();
+      }
+    });
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = Math.floor(seconds % 60);
+      return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+
+    function updateTimeDisplay() {
+      timeDisplay.textContent = `${formatTime(currentAudio.currentTime)}/${formatTime(currentAudio.duration)}`;
+    }
+
+    audio1.addEventListener('timeupdate', updateTimeDisplay);
+    audio2.addEventListener('timeupdate', updateTimeDisplay);
+    audio3.addEventListener('timeupdate', updateTimeDisplay);
+    audio4.addEventListener('timeupdate', updateTimeDisplay);
+
+  </script>
+</body>
+</html>
